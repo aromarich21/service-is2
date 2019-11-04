@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Elements App</title>
+</head>
+<body>
+
+    <div>
+        <h2>All Elements</h2>
+        <ul id="elements" />
+    </div>
+    <div>
+        <h2>Search by ID</h2>
+        <input type="text" id="elementId" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="element" />
+    </div>
+
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <script>
+        var uri = 'api/elements';
+
+        $(document).ready(function () {
+            // Send an AJAX request
+            $.getJSON(uri)
+                .done(function (data) {
+                    // On success, 'data' contains a list of products.
+                    $.each(data, function (key, item) {
+                        // Add a list item for the product.
+                        $('<li>', { text: formatItem(item) }).appendTo($('#elements'));
+                    });
+                });
+        });
+
+        function formatItem(item) {
+            return '{id:' + item.Id + '}' + ' ' + item.Level + '.' + item.Number + ' ' + item.Name;
+        }
+
+        function find() {
+            var id = $('#elementId').val();
+            $.getJSON(uri + '/' + id)
+                .done(function (data) {
+                    $('#element').text(formatItem(data));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#element').text('Error: ' + err);
+                });
+        }
+    </script>
+</body>
+</html>
