@@ -18,7 +18,7 @@ namespace modue_integration
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(asm.Location);
             JavaScript js = new JavaScript();
             js.ConsoleLog("serviceVersion = " + fvi.ProductVersion + " loaded");
-            Label1.Text = fvi.ProductVersion + " beta";
+            Label1.Text = fvi.ProductVersion;
         }
     }
 }

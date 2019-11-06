@@ -27,6 +27,11 @@ namespace modue_integration.Models
         {
 
         }
+
+        public void ElementsConnect()
+        {
+
+        }
         public void ConsoleLogElements()
         {
             JavaScript js = new JavaScript();
