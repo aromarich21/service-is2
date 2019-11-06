@@ -248,7 +248,7 @@
     <Compile Include="Models\CookiesJob.cs" />
     <Compile Include="Models\Elements.cs" />
     <Compile Include="Models\FileDiagramm.cs" />
-    <Compile Include="Models\IntegrationIfElementIsEmpty.cs" />
+    <Compile Include="Models\Integrator.cs" />
     <Compile Include="Models\JavaScript.cs" />
     <Compile Include="Models\Links.cs" />
     <Compile Include="module.aspx.cs">

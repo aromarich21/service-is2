@@ -22,12 +22,12 @@ namespace modue_integration
         public int settingsTimeSecondsCookies = 1;  ///  cookies_config. время куки
         public bool goodSchemaFile = false; // метка проверки схемы XML
         public List<object> sourceDropDown = new List<object>(); //датасурс для dropdown 
-        public List<Elements> sourceCurElements = new List<Elements>(); //датасурс элементов cur диаграммы
-        public List<Elements> sourceIntElements = new List<Elements>(); //датасурс элементов int диаграммы
-        public List<Links> sourceIntLinks = new List<Links>(); //датасурс связей cur диаграммы
-        public List<Links> sourceCurLinks = new List<Links>(); //датасурс связей int диаграммы
-        public string userChoice; // метка выбора итема dropdownа пользователем
-        public List<Elements> sourceResElements = new List<Elements>(); //датасурс элементов res диаграммы
+        static public List<Elements> sourceCurElements = new List<Elements>(); //датасурс элементов cur диаграммы
+        static public List<Elements> sourceIntElements = new List<Elements>(); //датасурс элементов int диаграммы
+        static public List<Links> sourceIntLinks = new List<Links>(); //датасурс связей cur диаграммы
+        static public List<Links> sourceCurLinks = new List<Links>(); //датасурс связей int диаграммы
+        static public string userChoice; // метка выбора итема dropdownа пользователем
+        static public List<Elements> sourceResElements = new List<Elements>(); //датасурс элементов res диаграммы
         /// function back
         public void RedirectToAuth() //редирект на страницу авторизации
         {
@@ -467,6 +467,8 @@ namespace modue_integration
         public void integrationIfElementIsEmpty()
         {          
             var countResultDiagramm = Int32.Parse(countIntgrElement.Value) + Int32.Parse(countCurElement.Value) - 1;
+            Integrator integrator = new Integrator(sourceCurElements, sourceIntElements, sourceCurLinks,sourceIntLinks);
+            integrator.ConsoleLogElements();
         }
         ////////////////////
 
@@ -569,6 +571,7 @@ namespace modue_integration
         }
         protected void Button3_Click(object sender, EventArgs e) //тестовый баттон
         {
+
             integrationIfElementIsEmpty();
         }
         /// garbage
