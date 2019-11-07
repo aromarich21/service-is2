@@ -62,7 +62,8 @@
         <asp:HiddenField runat="server" ID="countCurElement" ClientIDMode="Static" />
         <asp:HiddenField runat="server" ID="countIntgrElement" ClientIDMode="Static" />
         <asp:HiddenField runat="server" ID="countResultElement" ClientIDMode="Static" />
-        <asp:HiddenField runat="server" ID="countIntgrLinks" ClientIDMode="Static" />
+        <asp:HiddenField runat="server" ID="countIntgrLinks" ClientIDMode="Static" />      
+        <asp:HiddenField runat="server" ID="countCurrentLinks" ClientIDMode="Static" />
     </div>
 </asp:Content>
 

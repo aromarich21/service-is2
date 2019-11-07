@@ -27,7 +27,10 @@ namespace modue_integration
         static public List<Links> sourceIntLinks = new List<Links>(); //датасурс связей cur диаграммы
         static public List<Links> sourceCurLinks = new List<Links>(); //датасурс связей int диаграммы
         static public string userChoice; // метка выбора итема dropdownа пользователем
+        static public string itemChoiceLevel; // уровень выбранного элемента
+        static public string itemChoiceNumber; //номер выбранного элемента
         static public List<Elements> sourceResElements = new List<Elements>(); //датасурс элементов res диаграммы
+        static public string defaultNameElement = "defaultName";
         /// function back
         public void RedirectToAuth() //редирект на страницу авторизации
         {
@@ -213,9 +216,6 @@ namespace modue_integration
                         Match match = pattern.Match(elementCookie);
                         if (match.Success)
                         {
-                            //if (match.Groups[1].Value == null || match.Groups[1].Value == "")
-                            //intgrElements[countGoodElements] = new Elements("", match.Groups[2].Value);
-                            //else
                             intgrElements[countGoodElements] = new Elements(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value, match.Groups[5].Value, match.Groups[6].Value, match.Groups[7].Value);                      
                         }
                         countGoodElements++;
@@ -232,17 +232,6 @@ namespace modue_integration
                         sourceIntElements.Add(intgrElements[i]);
                     }
                 }
-                //////////test
-                JavaScript js = new JavaScript();
-                if (sourceIntElements != null)
-                {
-                    //sourceElements.Sort();
-                    foreach (Elements elements in sourceIntElements)
-                    {
-                        js.ConsoleLog(elements.Level + "." + elements.Number + "." + elements.Name);
-                    }
-                }
-                /////////////
             }
         }
         public void ReadCookieIntgrLinks() //прочтение cookie связей интегрируемой диаграммы, инициализация массива класса Links
@@ -285,15 +274,15 @@ namespace modue_integration
                     }
                 }
                 //////////test
-                JavaScript js = new JavaScript();
-                if (sourceIntLinks != null)
-                {
+                //JavaScript js = new JavaScript();
+                //if (sourceIntLinks != null)
+                //{
                     //sourceElements.Sort();
-                    foreach (Links links in sourceIntLinks)
-                    {
-                        js.ConsoleLog(links.Afe1 + " " + links.Afe2 + " " + links.Afe3 + " " + links.Type);
-                    }
-                }
+                    //foreach (Links links in sourceIntLinks)
+                   // {
+                     //   js.ConsoleLog(links.Afe1 + " " + links.Afe2 + " " + links.Afe3 + " " + links.Type);
+                   // }
+                //}
                 /////////////
             }
         }
@@ -305,7 +294,7 @@ namespace modue_integration
             if (cookieCount2 != null)
             {
                 var countLinks = Int32.Parse(cookieCount2.Value);
-                countIntgrLinks.Value = cookieCount2.Value;
+                countCurrentLinks.Value = cookieCount2.Value;
                 Links[] curLinks = new Links[countLinks];
                 var countGoodElements = 0;
                 for (var j = 1; countGoodElements < countLinks; j++)
@@ -319,7 +308,6 @@ namespace modue_integration
                         Match match = pattern2.Match(linkCookie);
                         if (match.Success)
                         {
-
                             curLinks[countGoodElements] = new Links(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value);
                         }
                         countGoodElements++;
@@ -336,17 +324,6 @@ namespace modue_integration
                         sourceCurLinks.Add(curLinks[i]);
                     }
                 }
-                //////////test
-                JavaScript js = new JavaScript();
-                if (sourceCurLinks != null)
-                {
-                    //sourceElements.Sort();
-                    foreach (Links links in sourceCurLinks)
-                    {
-                        js.ConsoleLog(links.Afe1 + " " + links.Afe2 + " " + links.Afe3 + " " + links.Type);
-                    }
-                }
-                /////////////
             }
         }
         public void ReadCookieCurElements() //прочтение cookie элементов текущей диаграммы, инициализация массива класса Elements, наполнение DropDownList1
@@ -372,9 +349,6 @@ namespace modue_integration
                         //Match match = pattern.Match(cookie.Value); // если не нужно декодирование
                         if (match.Success)
                         {
-                            //if (match.Groups[1].Value == null || match.Groups[1].Value == "")
-                               // curElements[countGoodElements] = new Elements("", match.Groups[2].Value, match.Groups[3].Value);
-                           // else
                                 curElements[countGoodElements] = new Elements(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value, match.Groups[5].Value, match.Groups[6].Value, match.Groups[7].Value);
                         }
                         countGoodElements++;
@@ -400,24 +374,14 @@ namespace modue_integration
                         if (curElements[i].Name != "")
                         sourceDropDown.Add(curElements[i].Level + "." + curElements[i].Number + "." + curElements[i].Name);
                         else
-                        sourceDropDown.Add(curElements[i].Level + "." + curElements[i].Number + "." + "<empty>");
+                        sourceDropDown.Add(curElements[i].Level + "." + curElements[i].Number + "." + defaultNameElement);
 
                         sourceCurElements.Add(curElements[i]);
                     }
                 }
                 if (sourceDropDown != null)
                     sourceDropDown.Sort();
-                //////////test
-                JavaScript js = new JavaScript();
-                if (sourceCurElements != null)
-                {
-                    //sourceElements.Sort();
-                    foreach ( Elements elements in sourceCurElements)
-                    {
-                        js.ConsoleLog(elements.Level+"."+ elements.Number+"."+elements.Name);
-                    }
-                }
-                /////////////
+
                 DropDownList1.DataSource = sourceDropDown;
                 DropDownList1.DataBind();
                 if (DropDownList1.Items.Count != 0)
@@ -464,13 +428,38 @@ namespace modue_integration
                 auth_ = Encoding.GetEncoding("Windows-1251").GetString(inputBytes);
             }
         } //считывание куки авторизации
+        public void ConsoleLog(string message)
+        {
+            JavaScript js = new JavaScript();
+            js.ConsoleLog(message);
+        } //test func для просмотра значений из консоли
+        public void DetermineItem(string valueItem)
+        {
+            Regex pattern2 = new Regex("([\\d])[.]([\\d])[.](.*)");
+            Match match = pattern2.Match(valueItem);
+            if (match.Success)
+            {
+                itemChoiceLevel = match.Groups[1].Value;
+                itemChoiceNumber= match.Groups[2].Value;
+            }
+        } //получение name выбранного итема 
         public void integrationIfElementIsEmpty()
-        {          
-            var countResultDiagramm = Int32.Parse(countIntgrElement.Value) + Int32.Parse(countCurElement.Value) - 1;
-            Integrator integrator = new Integrator(sourceCurElements, sourceIntElements, sourceCurLinks,sourceIntLinks);
-            integrator.ConsoleLogElements();
+        {
+            //var countResultDiagramm = Int32.Parse(countIntgrElement.Value) + Int32.Parse(countCurElement.Value) - 1;
+            try 
+            {
+                Integrator integrator = new Integrator(
+                                                   sourceCurElements, sourceIntElements,
+                                                   sourceCurLinks, sourceIntLinks,
+                                                   countCurElement.Value, countIntgrElement.Value,
+                                                   countCurrentLinks.Value, countIntgrLinks.Value,
+                                                   itemChoiceLevel, itemChoiceNumber
+                                                   );
+                integrator.ConsoleLogElements();
+            }
+            catch { }
         }
-        ////////////////////
+        /////////////////////////////////back
 
         protected void Button1_Click(object sender, EventArgs e) //button "загрузить тек. диаграмму"
         {
@@ -503,7 +492,6 @@ namespace modue_integration
                 {
                     SetCssErrorTextBox3("Неправильный формат файла!");
                     SetCssErrorTextBox1();
-
                 }
             }
             else
@@ -562,7 +550,9 @@ namespace modue_integration
         }
         protected void Button4_Click(object sender, EventArgs e) //баттон для выбора итема из дропдауна
         {
-           userChoice = DropDownList1.SelectedValue;
+            userChoice = DropDownList1.SelectedValue;
+            DetermineItem(userChoice);
+            ConsoleLog("Your choice = " + itemChoiceLevel + "." + itemChoiceNumber); //test
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -571,7 +561,6 @@ namespace modue_integration
         }
         protected void Button3_Click(object sender, EventArgs e) //тестовый баттон
         {
-
             integrationIfElementIsEmpty();
         }
         /// garbage
