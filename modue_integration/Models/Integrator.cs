@@ -19,7 +19,6 @@ namespace modue_integration.Models
         public string NumberChoiceElement { get; set; }
         public static Elements choiceElement { get; set; }
 
-
         public Integrator(List<Elements> curElements, List<Elements>intElements, 
                           List<Links> curLinks, List<Links> intLinks,
                           string curCountElements,string intCountElements,
@@ -38,7 +37,9 @@ namespace modue_integration.Models
             CountIntLinks = intCountLinks;
             LevelChoiceElement = levelElement;
             NumberChoiceElement = numberElement;
-            SearchElementWithIndex(SearchIndexElement(LevelChoiceElement, NumberChoiceElement, ResElements));
+            var index = SearchIndexElement(LevelChoiceElement, NumberChoiceElement, ResElements);
+            SearchElementWithIndex(index);
+            ConnectInEmptyElement(index);
             //ConsoleLog(choiceElement.Name);
         }
         public Integrator(List<Elements> curElements, List<Elements> intElements, 
@@ -61,13 +62,13 @@ namespace modue_integration.Models
         {
 
         }
-        public void ConsoleLogElements()
+        public void ConsoleLogElements(List<Elements> listElements)
         {
             JavaScript js = new JavaScript();
-            if (ResElements != null)
+            if (listElements != null)
             {
                 //sourceElements.Sort();
-                foreach (Elements elements in ResElements)
+                foreach (Elements elements in listElements)
                 {
                     js.ConsoleLog(elements.Level + "." + elements.Number + "." + elements.Name);
                 }
@@ -100,6 +101,24 @@ namespace modue_integration.Models
             choiceElement = new Elements();
             var i = Int32.Parse(index);
             choiceElement = ResElements[i];
+        }
+        public void ConnectInEmptyElement(string index)
+        {
+            //var countResultDiagramm = Int32.Parse(CountIntElements) + Int32.Parse(CountResElements) - 1;
+            var count = Int32.Parse(CountResElements);
+            var indexChange = Int32.Parse(index);
+            var iteration = 1;          
+            foreach (Elements elements in IntElements)
+            {
+                if (iteration == 1)
+                    ResElements[indexChange] = elements;
+                ResElements.Add(elements);
+
+                count++;
+                iteration++;
+            }
+            CountResElements = count.ToString();
+            ConsoleLogElements(ResElements);
         }
     }
 }

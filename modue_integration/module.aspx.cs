@@ -273,17 +273,6 @@ namespace modue_integration
                         sourceIntLinks.Add(intgrLinks[i]);
                     }
                 }
-                //////////test
-                //JavaScript js = new JavaScript();
-                //if (sourceIntLinks != null)
-                //{
-                    //sourceElements.Sort();
-                    //foreach (Links links in sourceIntLinks)
-                   // {
-                     //   js.ConsoleLog(links.Afe1 + " " + links.Afe2 + " " + links.Afe3 + " " + links.Type);
-                   // }
-                //}
-                /////////////
             }
         }
         public void ReadCookieCurLinks() //прочтение cookie связей интегрируемой диаграммы, инициализация массива класса Links
@@ -433,6 +422,11 @@ namespace modue_integration
             JavaScript js = new JavaScript();
             js.ConsoleLog(message);
         } //test func для просмотра значений из консоли
+        public void Alert(string message)
+        {
+            JavaScript js = new JavaScript();
+            js.Alert(message);
+        }
         public void DetermineItem(string valueItem)
         {
             Regex pattern2 = new Regex("([\\d])[.]([\\d])[.](.*)");
@@ -445,7 +439,6 @@ namespace modue_integration
         } //получение name выбранного итема 
         public void integrationIfElementIsEmpty()
         {
-            //var countResultDiagramm = Int32.Parse(countIntgrElement.Value) + Int32.Parse(countCurElement.Value) - 1;
             try 
             {
                 Integrator integrator = new Integrator(
@@ -455,9 +448,9 @@ namespace modue_integration
                                                    countCurrentLinks.Value, countIntgrLinks.Value,
                                                    itemChoiceLevel, itemChoiceNumber
                                                    );
-                integrator.ConsoleLogElements();
+                //integrator.ConsoleLogElements();
             }
-            catch { }
+            catch { Alert("error"); }
         }
         /////////////////////////////////back
 
@@ -552,7 +545,7 @@ namespace modue_integration
         {
             userChoice = DropDownList1.SelectedValue;
             DetermineItem(userChoice);
-            ConsoleLog("Your choice = " + itemChoiceLevel + "." + itemChoiceNumber); //test
+            //ConsoleLog("Your choice = " + itemChoiceLevel + "." + itemChoiceNumber); //test
         }
         protected void Page_Load(object sender, EventArgs e)
         {
