@@ -18,6 +18,8 @@ namespace modue_integration.Models
         public string LevelChoiceElement { get; set; }
         public string NumberChoiceElement { get; set; }
         public static Elements choiceElement { get; set; }
+        public static Elements XElement { get; set; }
+        public string Type { get; set; }
 
         public Integrator(List<Elements> curElements, List<Elements>intElements, 
                           List<Links> curLinks, List<Links> intLinks,
@@ -25,6 +27,7 @@ namespace modue_integration.Models
                           string curCountLinks, string intCountLinks, 
                           string levelElement, string numberElement)
         {
+            Type = "emptyElement";
             ResElements = new List<Elements>();
             ResLinks = new List<Links>();
             ResElements = curElements;
@@ -38,8 +41,9 @@ namespace modue_integration.Models
             LevelChoiceElement = levelElement;
             NumberChoiceElement = numberElement;
             var index = SearchIndexElement(LevelChoiceElement, NumberChoiceElement, ResElements);
-            SearchElementWithIndex(index);
+            SearchElementWithIndexChoiceElement(index);
             ConnectInEmptyElement(index);
+            RecodingElements(Int32.Parse(index));
             //ConsoleLog(choiceElement.Name);
         }
         public Integrator(List<Elements> curElements, List<Elements> intElements, 
@@ -47,6 +51,7 @@ namespace modue_integration.Models
                           string curCountElements, string intCountElements,
                           string curCountLinks, string intCountLinks)
         {
+            Type = "newElement";
             ResElements = new List<Elements>();
             ResLinks = new List<Links>();
             ResElements = curElements;
@@ -67,10 +72,20 @@ namespace modue_integration.Models
             JavaScript js = new JavaScript();
             if (listElements != null)
             {
-                //sourceElements.Sort();
                 foreach (Elements elements in listElements)
                 {
                     js.ConsoleLog(elements.Level + "." + elements.Number + "." + elements.Name);
+                }
+            }
+        }
+        public void ConsoleLogLinks(List<Links> listLinks)
+        {
+            JavaScript js = new JavaScript();
+            if (listLinks != null)
+            {
+                foreach (Links elements in listLinks)
+                {
+                    js.ConsoleLog(elements.Afe1 + "." + elements.Afe2 + "." + elements.Afe3);
                 }
             }
         }
@@ -88,37 +103,88 @@ namespace modue_integration.Models
                 if (elements.Level == level && elements.Number == number)
                 {
                     index = count.ToString();
-                    JavaScript js = new JavaScript();
-                    js.ConsoleLog("Ваш выбранный итем = " + index);
                     break;
                 }
                 count++;
             }
             return index;
         }
-        public void SearchElementWithIndex(string index)
+        public void SearchElementWithIndexChoiceElement(string index)
         {
             choiceElement = new Elements();
             var i = Int32.Parse(index);
             choiceElement = ResElements[i];
+        }
+        public Elements SearchElementWithIndex(int index) 
+        {
+            return ResElements[index]; 
+        }
+        public string SearchNumberLastElement(string id, List<Links> linksCurrent)
+        {
+            foreach (Links elements in linksCurrent)
+            {
+                if (elements.Afe1 == id && elements.Type == "3" && elements.Afe3 == "0")
+                {
+                    return elements.Afe2;
+                }
+            }
+            return null;
         }
         public void ConnectInEmptyElement(string index)
         {
             //var countResultDiagramm = Int32.Parse(CountIntElements) + Int32.Parse(CountResElements) - 1;
             var count = Int32.Parse(CountResElements);
             var indexChange = Int32.Parse(index);
-            var iteration = 1;          
+            var iteration = 1;      
             foreach (Elements elements in IntElements)
             {
                 if (iteration == 1)
+                {
                     ResElements[indexChange] = elements;
-                ResElements.Add(elements);
+                    ResElements[indexChange].Level = choiceElement.Level;
+                    ResElements[indexChange].Number = choiceElement.Number;
+                    XElement = ResElements[indexChange];
+                }
+                else
+                {
+                    ResElements.Add(elements);
+                    count++;
+                }
+                iteration++;
+            }
+            CountResElements = count.ToString();
+            ConsoleLogElements(ResElements); //test
+            count = Int32.Parse(CountResLinks);
+            iteration = 1;
+            foreach (Links links in IntLinks)
+            {
+                if (iteration != 1)
+                    ResLinks.Add(links);
 
                 count++;
                 iteration++;
             }
-            CountResElements = count.ToString();
-            ConsoleLogElements(ResElements);
+            CountResLinks = count.ToString();
+            ConsoleLogLinks(ResLinks); //test
+        }
+        public void RecodingElements(int indexChange)
+        {
+            if (Type == "emptyElement")
+            {
+                var number = Int32.Parse(ResElements[indexChange].Number);
+                var level = Int32.Parse(ResElements[indexChange].Level);
+                number--;
+                var index = SearchIndexElement(level.ToString(), number.ToString(), ResElements);
+                var workElement = SearchElementWithIndex(Int32.Parse(index));
+                var workLastNumber = SearchNumberLastElement(workElement.Id,ResLinks);
+                ConsoleLog(workElement.Name);
+                ConsoleLog(workLastNumber);
+            }
+
+            if (Type == "newElement")
+            {
+
+            }
         }
     }
 }
