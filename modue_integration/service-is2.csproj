@@ -214,6 +214,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\ElementsController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Cookies.aspx.cs">
       <DependentUpon>Cookies.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -247,7 +248,7 @@
     </Compile>
     <Compile Include="Models\CookiesJob.cs" />
     <Compile Include="Models\Elements.cs" />
-    <Compile Include="Models\FileDiagramm.cs" />
+    <Compile Include="Models\FileIS2.cs" />
     <Compile Include="Models\Integrator.cs" />
     <Compile Include="Models\JavaScript.cs" />
     <Compile Include="Models\Links.cs" />

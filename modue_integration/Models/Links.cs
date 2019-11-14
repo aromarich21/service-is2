@@ -16,7 +16,6 @@ namespace modue_integration.Models
         {
 
         }
-
         public Links(string afe1, string afe2, string afe3, string type)
         {
             Afe1 = afe1;
@@ -24,6 +23,5 @@ namespace modue_integration.Models
             Afe3 = afe3;
             Type = type;
         }
-
     }
 }

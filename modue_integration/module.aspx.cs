@@ -545,6 +545,8 @@ namespace modue_integration
         {
             userChoice = DropDownList1.SelectedValue;
             DetermineItem(userChoice);
+            var type = FileUpload1.GetType();
+            ConsoleLog(type.ToString());
             //ConsoleLog("Your choice = " + itemChoiceLevel + "." + itemChoiceNumber); //test
         }
         protected void Page_Load(object sender, EventArgs e)
